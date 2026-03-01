@@ -53,36 +53,36 @@ kubectl -n vault exec -i vault-0 -- sh -c "export VAULT_ADDR=http://127.0.0.1:82
 ## 6) Create policies and roles per environment
 
 ```bash
-kubectl -n vault exec -i vault-0 -- sh -c "cat <<'EOF' > /tmp/bsis-app-dev.hcl
-path \"kv/data/bsis/dev/app\" {
+kubectl -n vault exec -i vault-0 -- sh -c "cat <<'EOF' > /tmp/bsis-app-development.hcl
+path \"kv/data/bsis/development/app\" {
   capabilities = [\"read\"]
 }
 EOF
 export VAULT_ADDR=http://127.0.0.1:8200
 vault login <ROOT_TOKEN> >/dev/null
-vault policy write bsis-app-dev /tmp/bsis-app-dev.hcl
-vault write auth/kubernetes/role/bsis-app-dev bound_service_account_names=bsis-app bound_service_account_namespaces=app-dev policies=bsis-app-dev ttl=24h"
+vault policy write bsis-app-development /tmp/bsis-app-development.hcl
+vault write auth/kubernetes/role/bsis-app-development bound_service_account_names=bsis-app bound_service_account_namespaces=app-development policies=bsis-app-development ttl=24h"
 ```
 
 Repeat for:
 
-- `bsis-app-stage` with path `kv/data/bsis/stage/app` and namespace `app-stage`
-- `bsis-app-prod` with path `kv/data/bsis/prod/app` and namespace `app-prod`
+- `bsis-app-staging` with path `kv/data/bsis/staging/app` and namespace `app-staging`
+- `bsis-app-production` with path `kv/data/bsis/production/app` and namespace `app-production`
 
 ## 7) Seed secrets
 
 ```bash
-kubectl -n vault exec -it vault-0 -- sh -c "export VAULT_ADDR=http://127.0.0.1:8200 && vault login <ROOT_TOKEN> >/dev/null && vault kv put kv/bsis/dev/app DB_URL='postgres://dev...' JWT_SECRET='dev-secret'"
-kubectl -n vault exec -it vault-0 -- sh -c "export VAULT_ADDR=http://127.0.0.1:8200 && vault login <ROOT_TOKEN> >/dev/null && vault kv put kv/bsis/stage/app DB_URL='postgres://stage...' JWT_SECRET='stage-secret'"
-kubectl -n vault exec -it vault-0 -- sh -c "export VAULT_ADDR=http://127.0.0.1:8200 && vault login <ROOT_TOKEN> >/dev/null && vault kv put kv/bsis/prod/app DB_URL='postgres://prod...' JWT_SECRET='prod-secret'"
+kubectl -n vault exec -it vault-0 -- sh -c "export VAULT_ADDR=http://127.0.0.1:8200 && vault login <ROOT_TOKEN> >/dev/null && vault kv put kv/bsis/development/app DB_URL='postgres://development...' JWT_SECRET='development-secret'"
+kubectl -n vault exec -it vault-0 -- sh -c "export VAULT_ADDR=http://127.0.0.1:8200 && vault login <ROOT_TOKEN> >/dev/null && vault kv put kv/bsis/staging/app DB_URL='postgres://staging...' JWT_SECRET='staging-secret'"
+kubectl -n vault exec -it vault-0 -- sh -c "export VAULT_ADDR=http://127.0.0.1:8200 && vault login <ROOT_TOKEN> >/dev/null && vault kv put kv/bsis/production/app DB_URL='postgres://production...' JWT_SECRET='production-secret'"
 ```
 
 ## 8) Validate ESO sync
 
 ```bash
-kubectl -n app-dev get externalsecret,secret | grep bsis-app-secrets
-kubectl -n app-stage get externalsecret,secret | grep bsis-app-secrets
-kubectl -n app-prod get externalsecret,secret | grep bsis-app-secrets
+kubectl -n app-development get externalsecret,secret | grep bsis-app-secrets
+kubectl -n app-staging get externalsecret,secret | grep bsis-app-secrets
+kubectl -n app-production get externalsecret,secret | grep bsis-app-secrets
 ```
 
 ## Notes

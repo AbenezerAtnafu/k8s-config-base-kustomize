@@ -5,7 +5,7 @@ metadata:
 spec:
   tls:
     - hosts:
-        - app-stage.example.com
-      secretName: bsis-app-stage-tls
+        - app.example.com
+      secretName: bsis-app-production-tls
   rules:
-    - host: app-stage.example.com
+    - host: app.example.com

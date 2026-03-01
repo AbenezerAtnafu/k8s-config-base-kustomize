@@ -1,4 +1,4 @@
-name: Build Push and Update Dev Overlay
+name: Build Push and Update Development Overlay
 
 on:
   push:
@@ -12,7 +12,7 @@ permissions:
 
 env:
   IMAGE_NAME: ghcr.io/habtec/bsis-app
-  OVERLAY_FILE: apps/overlays/dev/kustomization.yaml
+  OVERLAY_FILE: apps/overlays/development/kustomization.yaml
 
 jobs:
   build_push_update:
@@ -42,12 +42,12 @@ jobs:
           push: true
           tags: |
             ${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.tag }}
-            ${{ env.IMAGE_NAME }}:dev-latest
+            ${{ env.IMAGE_NAME }}:development-latest
 
       - name: Install yq
         uses: mikefarah/yq@v4.44.5
 
-      - name: Update dev overlay image tag
+      - name: Update development overlay image tag
         run: |
           yq -i '(.images[] | select(.name == "ghcr.io/habtec/bsis-app")).newTag = strenv(NEW_TAG)' "${OVERLAY_FILE}"
         env:
@@ -60,7 +60,7 @@ jobs:
             exit 0
           fi
           git add "${OVERLAY_FILE}"
-          git commit -m "chore(deploy): update dev image tag to ${NEW_TAG}"
+          git commit -m "chore(deploy): update development image tag to ${NEW_TAG}"
           git push
         env:
           NEW_TAG: ${{ steps.vars.outputs.tag }}

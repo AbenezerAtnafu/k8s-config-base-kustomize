@@ -14,7 +14,7 @@ spec:
     - name: bsis.kubernetes.availability
       rules:
         - alert: BSISDeploymentReplicasMismatch
-          expr: kube_deployment_spec_replicas{namespace=~"app-(dev|stage|prod)"} > kube_deployment_status_replicas_available{namespace=~"app-(dev|stage|prod)"}
+          expr: kube_deployment_spec_replicas{namespace=~"app-(development|staging|production)"} > kube_deployment_status_replicas_available{namespace=~"app-(development|staging|production)"}
           for: 10m
           labels:
             severity: warning
@@ -24,7 +24,7 @@ spec:
             description: Deployment {{ $labels.namespace }}/{{ $labels.deployment }} has fewer available replicas than desired for more than 10 minutes.
 
         - alert: BSISPodCrashLooping
-          expr: max_over_time(kube_pod_container_status_waiting_reason{reason="CrashLoopBackOff",namespace=~"app-(dev|stage|prod)"}[10m]) >= 1
+          expr: max_over_time(kube_pod_container_status_waiting_reason{reason="CrashLoopBackOff",namespace=~"app-(development|staging|production)"}[10m]) >= 1
           for: 10m
           labels:
             severity: critical
@@ -34,7 +34,7 @@ spec:
             description: Pod {{ $labels.namespace }}/{{ $labels.pod }} is in CrashLoopBackOff for over 10 minutes.
 
         - alert: BSISPodRestartHigh
-          expr: increase(kube_pod_container_status_restarts_total{namespace=~"app-(dev|stage|prod)"}[15m]) > 3
+          expr: increase(kube_pod_container_status_restarts_total{namespace=~"app-(development|staging|production)"}[15m]) > 3
           for: 15m
           labels:
             severity: warning

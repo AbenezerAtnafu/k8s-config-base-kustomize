@@ -2,7 +2,7 @@
 
 ## Namespace strategy
 
-- Use one namespace per environment: `app-dev`, `app-stage`, `app-prod`.
+- Use one namespace per environment: `app-development`, `app-staging`, `app-production`.
 - Keep environment-scoped resources in each namespace (Deployments, Services, HPAs, Secrets).
 - Keep platform resources in dedicated namespaces (for example, `argocd`, `ingress-nginx`, `monitoring`).
 
@@ -20,31 +20,31 @@
   - CPU average utilization: 70%
   - Memory average utilization: 75%
 - Environment max replica defaults:
-  - dev: max 6
-  - stage: max 8
-  - prod: max 12
+  - development: max 6
+  - staging: max 8
+  - production: max 12
 - Keep `requests`/`limits` realistic because HPA and scheduler depend on them.
 
 ## Resource quota baseline
 
 `ResourceQuota` is defined per environment overlay:
 
-- `apps/overlays/dev/resourcequota.yaml`
-- `apps/overlays/stage/resourcequota.yaml`
-- `apps/overlays/prod/resourcequota.yaml`
+- `apps/overlays/development/resourcequota.yaml`
+- `apps/overlays/staging/resourcequota.yaml`
+- `apps/overlays/production/resourcequota.yaml`
 
 Baseline hard limits:
 
-- dev: `requests.cpu=2`, `requests.memory=3Gi`, `limits.cpu=8`, `limits.memory=6Gi`
-- stage: `requests.cpu=3`, `requests.memory=4Gi`, `limits.cpu=12`, `limits.memory=8Gi`
-- prod: `requests.cpu=6`, `requests.memory=8Gi`, `limits.cpu=20`, `limits.memory=16Gi`
+- development: `requests.cpu=2`, `requests.memory=3Gi`, `limits.cpu=8`, `limits.memory=6Gi`
+- staging: `requests.cpu=3`, `requests.memory=4Gi`, `limits.cpu=12`, `limits.memory=8Gi`
+- production: `requests.cpu=6`, `requests.memory=8Gi`, `limits.cpu=20`, `limits.memory=16Gi`
 
 Object count caps are also set (`pods`, `services`, `configmaps`, `secrets`) to prevent namespace sprawl.
 
 ## Node pools
 
 - Keep at least one general-purpose node pool for stateless workloads.
-- Add separate pools when traffic or compliance requirements diverge (for example, prod-only workloads).
+- Add separate pools when traffic or compliance requirements diverge (for example, production-only workloads).
 - Use taints/tolerations only when needed to avoid scheduling complexity on day 1.
 
 ## Network policy baseline
@@ -77,7 +77,7 @@ Cluster-level monitoring is deployed in a dedicated `monitoring` namespace via A
 Configured defaults:
 
 - Stack components: Prometheus, Grafana, Alertmanager.
-- Grafana ingress host: `grafana.example.com` with `cert-manager` cluster issuer `letsencrypt-prod`.
+- Grafana ingress host: `grafana.example.com` with `cert-manager` cluster issuer `letsencrypt-production`.
 - Grafana dashboards: open-source Kubernetes dashboards bundled by `kube-prometheus-stack`.
 - Alert channel: Slack `#grafana`, webhook read from secret `alertmanager-slack` key `webhook-url`.
 - Retention: metrics `15d` (Prometheus), alert data `120h` (Alertmanager).
@@ -99,10 +99,10 @@ Platform ingress and certificate management are deployed via Argo CD:
 - `platform/argocd/app-ingress-nginx.yaml` deploys `ingress-nginx` in namespace `ingress-nginx`.
 - `platform/argocd/app-cert-manager.yaml` deploys `cert-manager` in namespace `cert-manager`.
 - `platform/argocd/app-cert-manager-issuers.yaml` deploys shared issuers from Git.
-- `platform/cert-manager-config/clusterissuer-letsencrypt-prod.yaml` defines the default `ClusterIssuer` used by ingress objects.
+- `platform/cert-manager-config/clusterissuer-letsencrypt-production.yaml` defines the default `ClusterIssuer` used by ingress objects.
 
 Default assumptions:
 
 - Ingress service type is `LoadBalancer` (CCE ELB); add your cluster-specific ELB annotations in `app-ingress-nginx.yaml`.
 - ACME HTTP-01 solver uses ingress class `nginx`.
-- Base application ingress uses annotation `cert-manager.io/cluster-issuer: letsencrypt-prod`.
+- Base application ingress uses annotation `cert-manager.io/cluster-issuer: letsencrypt-production`.

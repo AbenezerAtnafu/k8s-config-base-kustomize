@@ -8,9 +8,9 @@ resources:
   - app-ingress-nginx.yaml
   - app-cert-manager.yaml
   - app-cert-manager-issuers.yaml
-  - app-dev.yaml
-  - app-stage.yaml
-  - app-prod.yaml
+  - app-development.yaml
+  - app-staging.yaml
+  - app-production.yaml
   - app-monitoring-base.yaml
   - app-monitoring-stack.yaml
   - app-monitoring-config.yaml

@@ -14,9 +14,9 @@ All other keys also rotate only on trigger events (incident, vendor rollover, or
 ## Prerequisites
 
 - Vault KV v2 paths exist:
-  - `kv/bsis/dev/app`
-  - `kv/bsis/stage/app`
-  - `kv/bsis/prod/app`
+  - `kv/bsis/development/app`
+  - `kv/bsis/staging/app`
+  - `kv/bsis/production/app`
 - ESO is healthy in namespace `external-secrets`
 - `ExternalSecret` resources are synced in each app namespace
 
@@ -33,25 +33,25 @@ All other keys also rotate only on trigger events (incident, vendor rollover, or
 Update Vault values:
 
 ```bash
-vault kv patch kv/bsis/dev/app DB_URL='postgres://...'
-vault kv patch kv/bsis/stage/app DB_URL='postgres://...'
-vault kv patch kv/bsis/prod/app DB_URL='postgres://...'
+vault kv patch kv/bsis/development/app DB_URL='postgres://...'
+vault kv patch kv/bsis/staging/app DB_URL='postgres://...'
+vault kv patch kv/bsis/production/app DB_URL='postgres://...'
 ```
 
 Force refresh (optional):
 
 ```bash
-kubectl -n app-dev annotate externalsecret bsis-app-secrets force-sync="$(date +%s)" --overwrite
-kubectl -n app-stage annotate externalsecret bsis-app-secrets force-sync="$(date +%s)" --overwrite
-kubectl -n app-prod annotate externalsecret bsis-app-secrets force-sync="$(date +%s)" --overwrite
+kubectl -n app-development annotate externalsecret bsis-app-secrets force-sync="$(date +%s)" --overwrite
+kubectl -n app-staging annotate externalsecret bsis-app-secrets force-sync="$(date +%s)" --overwrite
+kubectl -n app-production annotate externalsecret bsis-app-secrets force-sync="$(date +%s)" --overwrite
 ```
 
 Restart rollout:
 
 ```bash
-kubectl -n app-dev rollout restart deploy/bsis-app
-kubectl -n app-stage rollout restart deploy/bsis-app
-kubectl -n app-prod rollout restart deploy/bsis-app
+kubectl -n app-development rollout restart deploy/bsis-app
+kubectl -n app-staging rollout restart deploy/bsis-app
+kubectl -n app-production rollout restart deploy/bsis-app
 ```
 
 ## Validation checklist

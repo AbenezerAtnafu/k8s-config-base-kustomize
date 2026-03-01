@@ -16,8 +16,8 @@ Apply these labels to every workload resource (`Deployment`, `Service`, `HPA`, `
 - `app.kubernetes.io/component`: logical component (`identity`, `api`, `frontend`).
 - `app.kubernetes.io/part-of`: platform name (`bsis`).
 - `app.kubernetes.io/managed-by`: deployment manager (`argocd`).
-- `app.kubernetes.io/environment`: deployment environment (`dev`, `stage`, `prod`).
-- `app.kubernetes.io/instance`: unique workload instance in an environment (for example `identity-service-dev`).
+- `app.kubernetes.io/environment`: deployment environment (`development`, `staging`, `production`).
+- `app.kubernetes.io/instance`: unique workload instance in an environment (for example `identity-service-development`).
 
 ## BSIS service mapping
 
@@ -35,12 +35,12 @@ Use the following canonical names:
 Use lowercase kebab-case for all names. Avoid underscores, spaces, and uppercase letters.
 
 - Service slug format: `<service-name>` (for example `core-api`).
-- Environment format: `dev`, `stage`, `prod`.
-- Instance format: `<service-name>-<env>` (for example `core-api-prod`).
+- Environment format: `development`, `staging`, `production`.
+- Instance format: `<service-name>-<env>` (for example `core-api-production`).
 
 ### Kubernetes resource names
 
-- Namespace: `app-<env>` (for example `app-dev`).
+- Namespace: `app-<env>` (for example `app-development`).
 - Deployment/Service/HPA/Ingress/PDB/ServiceAccount base name: `<service-name>`.
 - Secret consumed by workload: `<service-name>-secrets`.
 - NetworkPolicy name: `<service-name>-default-deny-ingress`.
@@ -53,18 +53,18 @@ Use lowercase kebab-case for all names. Avoid underscores, spaces, and uppercase
 
 ### DNS and TLS naming
 
-- Host format: `<service-name>-<env>.example.com` for non-prod.
+- Host format: `<service-name>-<env>.example.com` for non-production.
 - Prod host format: `<service-name>.example.com`.
-- TLS secret format: `<service-name>-<env>-tls` (prod can be `<service-name>-prod-tls` for consistency).
+- TLS secret format: `<service-name>-<env>-tls` (production can be `<service-name>-production-tls` for consistency).
 
 ### Example mapping
 
-| Service | dev instance | stage instance | prod instance |
+| Service | development instance | staging instance | production instance |
 |---|---|---|---|
-| Identity Service | `identity-service-dev` | `identity-service-stage` | `identity-service-prod` |
-| Core API | `core-api-dev` | `core-api-stage` | `core-api-prod` |
-| Main BSIS Frontend | `main-bsis-frontend-dev` | `main-bsis-frontend-stage` | `main-bsis-frontend-prod` |
-| Facility Frontend | `facility-frontend-dev` | `facility-frontend-stage` | `facility-frontend-prod` |
+| Identity Service | `identity-service-development` | `identity-service-staging` | `identity-service-production` |
+| Core API | `core-api-development` | `core-api-staging` | `core-api-production` |
+| Main BSIS Frontend | `main-bsis-frontend-development` | `main-bsis-frontend-staging` | `main-bsis-frontend-production` |
+| Facility Frontend | `facility-frontend-development` | `facility-frontend-staging` | `facility-frontend-production` |
 
 ## Selector guidance
 
@@ -81,6 +81,6 @@ metadata:
     app.kubernetes.io/component: api
     app.kubernetes.io/part-of: bsis
     app.kubernetes.io/managed-by: argocd
-    app.kubernetes.io/environment: prod
-    app.kubernetes.io/instance: core-api-prod
+    app.kubernetes.io/environment: production
+    app.kubernetes.io/instance: core-api-production
 ```

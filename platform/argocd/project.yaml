@@ -13,11 +13,11 @@ spec:
     - "https://charts.external-secrets.io"
     - "https://helm.releases.hashicorp.com"
   destinations:
-    - namespace: app-dev
+    - namespace: app-development
       server: https://kubernetes.default.svc
-    - namespace: app-stage
+    - namespace: app-staging
       server: https://kubernetes.default.svc
-    - namespace: app-prod
+    - namespace: app-production
       server: https://kubernetes.default.svc
     - namespace: monitoring
       server: https://kubernetes.default.svc

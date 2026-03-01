@@ -4,12 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       target_environment:
-        description: "Environment to promote to (stage|prod)"
+        description: "Environment to promote to (staging|production)"
         required: true
         type: choice
         options:
-          - stage
-          - prod
+          - staging
+          - production
       image_tag:
         description: "Immutable image tag to deploy"
         required: true

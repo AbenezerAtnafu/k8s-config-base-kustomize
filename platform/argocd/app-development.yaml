@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: bsis-app-dev
+  name: bsis-app-development
   namespace: argocd
 spec:
   project: bsis
   source:
     repoURL: https://github.com/HABTec/bsis-k8s.git
     targetRevision: main
-    path: apps/overlays/dev
+    path: apps/overlays/development
   destination:
     server: https://kubernetes.default.svc
-    namespace: app-dev
+    namespace: app-development
   syncPolicy:
     automated:
       prune: true

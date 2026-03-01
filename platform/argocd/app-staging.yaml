@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: bsis-app-stage
+  name: bsis-app-staging
   namespace: argocd
 spec:
   project: bsis
   source:
     repoURL: https://github.com/HABTec/bsis-k8s.git
     targetRevision: main
-    path: apps/overlays/stage
+    path: apps/overlays/staging
   destination:
     server: https://kubernetes.default.svc
-    namespace: app-stage
+    namespace: app-staging
   syncPolicy:
     syncOptions:
       - CreateNamespace=true

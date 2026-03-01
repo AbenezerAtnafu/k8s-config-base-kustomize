@@ -10,16 +10,16 @@ For Vault rotation steps, see `docs/vault-rotation-runbook.md`.
 Update keys to match your application contract.
 
 ```bash
-kubectl -n app-dev create secret generic bsis-app-secrets \
-  --from-literal=DB_URL='postgres://user:pass@db-dev:5432/app' \
+kubectl -n app-development create secret generic bsis-app-secrets \
+  --from-literal=DB_URL='postgres://user:pass@db-development:5432/app' \
   --from-literal=JWT_SECRET='replace-me'
 
-kubectl -n app-stage create secret generic bsis-app-secrets \
-  --from-literal=DB_URL='postgres://user:pass@db-stage:5432/app' \
+kubectl -n app-staging create secret generic bsis-app-secrets \
+  --from-literal=DB_URL='postgres://user:pass@db-staging:5432/app' \
   --from-literal=JWT_SECRET='replace-me'
 
-kubectl -n app-prod create secret generic bsis-app-secrets \
-  --from-literal=DB_URL='postgres://user:pass@db-prod:5432/app' \
+kubectl -n app-production create secret generic bsis-app-secrets \
+  --from-literal=DB_URL='postgres://user:pass@db-production:5432/app' \
   --from-literal=JWT_SECRET='replace-me'
 ```
 
@@ -42,7 +42,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: secret-reader-bsis-app
-  namespace: app-dev
+  namespace: app-development
 rules:
   - apiGroups: [""]
     resources: ["secrets"]

@@ -4,7 +4,7 @@ This document defines how BSIS handles non-sensitive configuration and sensitive
 
 ## Scope
 
-- Environments: `app-dev`, `app-stage`, `app-prod`
+- Environments: `app-development`, `app-staging`, `app-production`
 - Platform namespaces: `argocd`, `ingress-nginx`, `cert-manager`, `monitoring`, `external-secrets`, `vault`
 - Applies to application workloads and platform integrations managed from this repository
 
@@ -29,7 +29,7 @@ Recommended examples:
 Guidelines:
 
 - Keep defaults in base only when safe for all environments.
-- Override environment-specific values in `apps/overlays/dev|stage|prod`.
+- Override environment-specific values in `apps/overlays/development|staging|production`.
 - Use explicit keys and avoid embedding opaque JSON blobs when possible.
 
 ## Secret management (sensitive)
