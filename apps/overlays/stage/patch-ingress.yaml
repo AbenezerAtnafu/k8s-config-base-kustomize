@@ -1,0 +1,11 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bsis-app
+spec:
+  tls:
+    - hosts:
+        - app-stage.example.com
+      secretName: bsis-app-stage-tls
+  rules:
+    - host: app-stage.example.com

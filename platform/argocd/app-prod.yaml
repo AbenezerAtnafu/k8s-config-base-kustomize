@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bsis-app-prod
+  namespace: argocd
+spec:
+  project: bsis
+  source:
+    repoURL: https://github.com/HABTec/bsis-k8s.git
+    targetRevision: main
+    path: apps/overlays/prod
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: app-prod
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
